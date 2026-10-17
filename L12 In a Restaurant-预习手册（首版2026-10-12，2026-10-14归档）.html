@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新NCE L12 In a Restaurant · 预习手册</title>
+<style>
+:root{
+  --bg:#FBFAF7; --surface:#FFFFFF; --ink:#1A1A1A; --muted:#5A6068; --faint:#8A8F98;
+  --line:#E5E2DA; --line2:#D8D5CD;
+  --teal:#1F6F63; --teal-soft:#E3F0EC; --teal-tint:#F2F8F6;
+  --amber:#D97706; --amber-ink:#B45309; --amber-soft:#FDF3E7;
+  --gray:#5A6068;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"PingFang SC","Microsoft YaHei","Source Han Sans SC",-apple-system,sans-serif;
+  font-size:15px; line-height:1.7; -webkit-font-smoothing:antialiased;
+}
+.en{font-family:Georgia,"Times New Roman",serif}
+
+/* ---------- 进度条 ---------- */
+#bar{position:fixed;top:0;left:0;height:3px;background:var(--teal);width:0;z-index:100;transition:width .1s}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;height:260px;overflow:hidden;background:#17554C}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.42}
+.hero-in{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 48px;max-width:1240px;margin:0 auto}
+.hero .kicker{font-size:12.5px;letter-spacing:3px;color:#8FC4B8;font-weight:600}
+.hero h1{margin:10px 0 6px;font-size:34px;color:#fff;font-weight:700;letter-spacing:.5px}
+.hero .sub{font-size:15px;color:#CFE2DC;margin-bottom:14px}
+.metabar{display:flex;flex-wrap:wrap;gap:0;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);border-radius:10px;overflow:hidden;width:fit-content}
+.metabar div{padding:8px 18px;border-right:1px solid rgba(255,255,255,.18)}
+.metabar div:last-child{border-right:none}
+.metabar .k{font-size:11px;color:#9FCBCA;letter-spacing:1px}
+.metabar .v{font-size:13.5px;color:#fff;font-weight:600}
+
+/* ---------- 工具栏 ---------- */
+.tools{position:sticky;top:0;z-index:50;background:rgba(251,250,247,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:10px 0}
+.tools-in{max-width:1240px;margin:0 auto;padding:0 48px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.legend{display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px}
+.chip button{
+  border:1px solid var(--line2);background:#fff;color:var(--gray);
+  border-radius:5px;padding:2px 9px;font-size:11.5px;cursor:pointer;
+  font-family:inherit;letter-spacing:.5px;transition:.15s;
+}
+.chip button.on-text{background:var(--gray);color:#fff;border-color:var(--gray);font-weight:600}
+.chip button.on-teach{background:var(--amber);color:#fff;border-color:var(--amber);font-weight:600}
+.chip button.on-ext{background:var(--teal);color:#fff;border-color:var(--teal);font-weight:600}
+.chip span.lbl{color:var(--faint);font-size:12px}
+.spacer{flex:1}
+.search{position:relative}
+.search input{
+  border:1px solid var(--line2);border-radius:7px;padding:6px 12px 6px 30px;
+  font-size:13px;width:210px;background:#fff;font-family:inherit;color:var(--ink);
+}
+.search input:focus{outline:none;border-color:var(--teal)}
+.search::before{content:"⌕";position:absolute;left:10px;top:4px;font-size:15px;color:var(--faint)}
+#hit{font-size:12px;color:var(--faint)}
+.ghost{border:1px solid var(--line2);background:#fff;color:var(--muted);border-radius:7px;padding:6px 12px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.ghost:hover{border-color:var(--teal);color:var(--teal)}
+
+/* ---------- 布局 ---------- */
+.wrap{max-width:1240px;margin:0 auto;padding:26px 48px 80px;display:grid;grid-template-columns:210px 1fr;gap:36px}
+nav.toc{position:sticky;top:66px;align-self:start;max-height:calc(100vh - 90px);overflow-y:auto;font-size:13px}
+nav.toc .part{font-size:11px;letter-spacing:2px;color:var(--faint);margin:16px 0 6px;font-weight:700}
+nav.toc .part:first-child{margin-top:0}
+nav.toc a{display:block;padding:4px 10px;color:var(--muted);text-decoration:none;border-left:2px solid var(--line);border-radius:0 4px 4px 0}
+nav.toc a:hover{color:var(--teal);background:var(--teal-tint)}
+nav.toc a.active{color:var(--teal);border-left-color:var(--teal);background:var(--teal-tint);font-weight:600}
+main{min-width:0}
+
+/* ---------- 章节 ---------- */
+section{margin-bottom:38px;scroll-margin-top:70px}
+.sec-h{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--teal);padding-bottom:8px;margin-bottom:6px}
+.sec-n{font-size:12px;letter-spacing:2px;color:var(--teal);font-weight:700}
+.sec-h h2{margin:0;font-size:23px;font-weight:700;letter-spacing:.3px}
+.sec-h .when{font-size:12.5px;color:var(--faint);margin-left:auto}
+.sec-lead{font-size:13.5px;color:var(--muted);margin:8px 0 18px;line-height:1.65}
+
+h3.sub{font-size:16.5px;margin:22px 0 10px;color:var(--teal);display:flex;align-items:center;gap:8px}
+h3.sub::before{content:"";width:3px;height:15px;background:var(--teal);border-radius:2px}
+h4.q{font-size:14.5px;margin:16px 0 8px;color:var(--ink)}
+
+/* ---------- 内容块 ---------- */
+.blk{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:13px 18px;margin-bottom:11px}
+.blk-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.blk-h .t{font-size:14px;font-weight:700;color:var(--teal)}
+.blk-b{font-size:14px;line-height:1.68}
+.blk[data-src="teach"]{border-left:4px solid var(--amber)}
+.blk[data-src="teach"] .blk-h .t{color:var(--amber-ink)}
+.blk[data-src="ext"]{border:1px dashed var(--teal)}
+.blk[data-src="ext"] .blk-h .t{color:var(--teal)}
+
+.badge{flex:none;border:1px solid var(--line2);border-radius:4px;padding:1px 7px;font-size:11px;color:var(--gray);white-space:nowrap;letter-spacing:.5px}
+.badge.teach{background:var(--amber);color:#fff;border-color:var(--amber);font-weight:700}
+.badge.ext{border:1px dashed var(--teal);color:var(--teal)}
+.badge.full{background:var(--amber);color:#fff;border-color:var(--amber);font-weight:700;font-size:12px;padding:3px 10px}
+
+.note-teach{color:var(--amber-ink);font-size:13px;line-height:1.6}
+.muted{color:var(--muted);font-size:12.5px}
+.faint{color:var(--faint);font-size:12px}
+
+ul.li{margin:6px 0 0;padding-left:20px}
+ul.li li{margin-bottom:5px;font-size:14px;line-height:1.65}
+ol.num{margin:6px 0 0;padding-left:22px}
+ol.num li{margin-bottom:6px;font-size:14px;line-height:1.68}
+
+/* 例句 */
+.sent{background:var(--teal-tint);border-radius:8px;padding:10px 14px;margin-bottom:7px;font-size:13.8px;line-height:1.6;border-left:3px solid var(--teal)}
+.sent .n{color:var(--teal);font-weight:700;margin-right:6px}
+
+/* 词汇卡 */
+.wordcard{display:grid;grid-template-columns:270px 1fr;gap:18px;margin-bottom:20px}
+.wc-l{background:var(--teal);border-radius:12px;padding:20px 22px;color:#fff;display:flex;flex-direction:column;gap:8px}
+.wc-l .idx{font-size:11.5px;letter-spacing:3px;color:#8FC4B8;display:flex;justify-content:space-between;align-items:center}
+.wc-l .w{font-size:31px;font-weight:700;margin-top:4px}
+.wc-l .ph{font-size:15px;color:#BFE0D8}
+.wc-l .def{font-size:14px;color:#DDEDE8;line-height:1.6}
+.wc-r{display:flex;flex-direction:column;gap:11px}
+.wc-l .cite{background:rgba(255,255,255,.13);border-left:4px solid var(--amber);border-radius:8px;padding:10px 13px;margin-top:auto}
+
+/* 表格 */
+.tbl-wrap{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.tbl-tools{padding:9px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;background:var(--teal-tint)}
+.tbl-tools input{border:1px solid var(--line2);border-radius:6px;padding:5px 11px;font-size:13px;font-family:inherit;width:220px;color:var(--ink)}
+.tbl-tools input:focus{outline:none;border-color:var(--teal)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{background:var(--teal);color:#fff;text-align:left;padding:9px 13px;font-weight:600;font-size:13px;white-space:nowrap}
+td{padding:8px 13px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#FCFBF9}
+tbody tr:hover{background:var(--teal-tint)}
+td.w{font-weight:700;color:var(--teal);white-space:nowrap}
+td.pos{color:var(--faint);white-space:nowrap;font-size:12.5px}
+.col-text{color:var(--ink)}
+.col-ext{color:var(--teal)}
+
+/* 功能表达 */
+.fn{display:flex;gap:10px;align-items:stretch;background:var(--teal-tint);border-radius:10px;padding:11px 16px;margin-bottom:9px}
+.fn .bd{flex:1;min-width:0}
+.fn .en-s{font-size:14.5px;font-weight:700;color:var(--teal);line-height:1.5}
+.fn .nt{font-size:12.5px;color:var(--amber-ink);margin-top:4px;line-height:1.55}
+
+/* 对话 */
+.chat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:9px}
+.crow{display:flex}
+.crow.l{justify-content:flex-start}
+.crow.r{justify-content:flex-end}
+.bub{max-width:74%;padding:8px 13px;border-radius:11px;font-size:14px;line-height:1.55}
+.crow.l .bub{background:var(--teal-soft);color:var(--ink);border-bottom-left-radius:3px}
+.crow.r .bub{background:var(--teal);color:#fff;border-bottom-right-radius:3px}
+.who{font-size:11px;color:var(--faint);margin:0 0 2px 2px}
+.crow.r .who{text-align:right;margin:0 2px 2px 0}
+
+/* 短文 */
+.essay{background:#fff;border:1px dashed var(--teal);border-radius:11px;padding:16px 20px;font-size:14.5px;line-height:1.85}
+.essay em{font-style:normal;font-weight:700;color:var(--amber-ink)}
+.essay-t{font-size:19px;font-weight:700;color:var(--teal);margin-bottom:8px;font-family:Georgia,serif}
+
+/* 折叠 */
+details.acc{border:1px solid var(--line);border-radius:10px;background:#fff;margin-bottom:11px}
+details.acc>summary{cursor:pointer;padding:12px 18px;font-size:14.5px;font-weight:600;color:var(--teal);list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px}
+details.acc>summary::-webkit-details-marker{display:none}
+details.acc>summary::after{content:"＋";color:var(--faint);font-size:16px}
+details.acc[open]>summary::after{content:"－"}
+details.acc>summary:hover{background:var(--teal-tint);border-radius:10px}
+details.acc .body{padding:0 18px 14px}
+
+/* 图 */
+figure{margin:0 auto 14px;text-align:center;max-width:680px}
+figure img{max-width:100%;max-height:260px;width:auto;height:auto;border-radius:11px;display:inline-block}
+figure figcaption{font-size:12px;color:var(--faint);margin-top:5px;text-align:center}
+
+/* 高亮条 */
+.callout{background:var(--amber-soft);border-left:4px solid var(--amber);border-radius:9px;padding:12px 17px;font-size:14px;line-height:1.68;margin-bottom:12px}
+.callout.teal{background:var(--teal-tint);border-left-color:var(--teal)}
+.callout b{color:var(--amber-ink)}
+.callout.teal b{color:var(--teal)}
+
+/* 路径条 */
+.path{display:flex;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:26px;background:#fff}
+.path div{flex:1;padding:12px 16px;border-right:1px solid var(--line)}
+.path div:last-child{border-right:none}
+.path .p-k{font-size:11px;letter-spacing:2px;color:var(--faint);font-weight:700}
+.path .p-t{font-size:14.5px;font-weight:600;margin-top:2px}
+.path .p-d{font-size:12px;color:var(--muted);margin-top:2px}
+
+footer{border-top:1px solid var(--line);margin-top:40px;padding-top:16px;font-size:12px;color:var(--faint);line-height:1.7}
+
+/* 筛选隐藏 */
+body.hide-text [data-src="text"],body.hide-teach [data-src="teach"],body.hide-ext [data-src="ext"]{display:none !important}
+.searching [data-hide="1"]{display:none !important}
+.no-hit{font-size:13px;color:var(--faint);padding:10px 0}
+
+/* 响应式 */
+@media(max-width:960px){
+  .wrap{grid-template-columns:1fr;padding:20px 20px 60px}
+  nav.toc{display:none}
+  .hero-in,.tools-in{padding:0 20px}
+  .wordcard{grid-template-columns:1fr}
+}
+@media print{
+  .tools,nav.toc,#bar{display:none}
+  .wrap{grid-template-columns:1fr;padding:0}
+  body{font-size:11pt}
+  .hero{height:auto;padding:24px;background:var(--teal)}
+  .hero img{display:none}
+  section{page-break-inside:avoid}
+  details.acc{page-break-inside:avoid}
+  details.acc>summary::after{content:""}
+}
+.sent .cn{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.step{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:10px}
+.step .no{width:34px;height:34px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;margin-top:2px}
+.step .tt{font-weight:700;font-size:14px}
+.step .dd{font-size:13.5px;color:var(--muted)}
+.ans{border-radius:8px;padding:10px 14px;margin-top:8px;font-size:13.8px;line-height:1.62}
+.ans .lab{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 8px;margin-bottom:5px;letter-spacing:1px}
+.ans.v1{background:#F7F6F2;border:1px solid var(--line)}
+.ans.v1 .lab{background:var(--gray);color:#fff}
+.ans.v2{background:var(--amber-soft);border:1px solid #F0DCBE}
+.ans.v2 .lab{background:var(--amber);color:#fff}
+.ans.en{font-family:Georgia,"Times New Roman",serif;font-size:14.2px}
+.trap{background:var(--amber-soft);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:9px 14px;margin-bottom:7px;font-size:13.5px}
+.grp{margin-bottom:16px}
+.grp .gt{font-size:13px;font-weight:700;color:var(--teal);letter-spacing:1px;margin-bottom:6px}
+.dlg{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.crow{display:flex;justify-content:flex-start;margin-bottom:10px}
+.crow.r{justify-content:flex-end}
+.bub{max-width:78%;padding:8px 13px;border-radius:11px;font-size:14px;line-height:1.55}
+.crow.l .bub{background:var(--teal-soft);color:var(--ink);border-bottom-left-radius:3px}
+.crow.r .bub{background:var(--teal);color:#fff;border-bottom-right-radius:3px}
+.crow .who{font-size:11px;color:var(--faint);margin:0 0 2px 2px}
+.crow.r .who{text-align:right;margin:0 2px 2px 0}
+.crow .cn{display:block;font-size:12.3px;color:var(--muted);margin-top:2px}
+.crow.r .cn{color:#DDEDE8}
+.essay-t{font-size:18px;font-weight:700;color:var(--teal);margin-bottom:8px;font-family:Georgia,serif}
+.callout .g-en{font-family:Georgia,serif;font-size:16.5px;font-weight:700;color:var(--teal)}
+.callout .g-cn{font-size:13px;color:var(--muted);margin-top:3px}
+  .blk,.step,.dlg,table.vt,.card2 .cr,.essay{break-inside:avoid}
+</style>
+</head>
+
+<div id="bar"></div>
+
+<header class="hero">
+  <div class="hero-in">
+    <div class="kicker">新NCE ENGLISH · CHAPTER 2 DINING · LESSON 12 · 预习手册</div>
+    <h1>餐厅点餐</h1>
+    <div class="sub">In a Restaurant · 4 个核心词 + 一整条「点餐流水线」+ 外出就餐三连问</div>
+    <div class="metabar">
+      <div><div class="k">上课时间</div><div class="v">2026-10-12 晚（以约课为准）</div></div>
+      <div><div class="k">授课教师</div><div class="v">以实际上课为准（近两课 Rommela.El）</div></div>
+      <div><div class="k">教材单元</div><div class="v">新NCE英语 · Chapter 2 Dining · Lesson 12</div></div>
+      <div><div class="k">课型</div><div class="v">听说学练 · 约 50 分钟</div></div>
+      <div><div class="k">内容来源</div><div class="v">上课课件截图 13 页逐页提取</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="tools">
+  <div class="tools-in">
+    <div class="legend">
+      <span class="chip"><button id="f-text" class="on-text">教材</button></span>
+      <span class="chip"><button id="f-teach" class="on-teach">预习重点</button></span>
+      <span class="chip"><button id="f-ext" class="on-ext">扩充</button></span>
+    </div>
+    <div class="search"><input id="q" type="text" placeholder="搜索词汇 / 例句 / 语法点…"></div>
+    <span id="hit"></span>
+    <span class="spacer"></span>
+    <button class="ghost" id="expand">全部展开</button>
+    <button class="ghost" id="collapse">全部折叠</button>
+    <button class="ghost" onclick="window.print()">打印 / 存 PDF</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <nav class="toc" id="toc">
+    <div class="part">PART A · 课前须知</div>
+    <a href="#s1">01 课程信息与学习目标</a>
+    <a href="#s2">02 课件流程一览</a>
+    <div class="part">PART B · 词汇预习</div>
+    <a href="#s3">03 词汇总表 · 4 主词 + 点餐扩展词</a>
+    <a href="#s4">04 词汇精讲 · 4 张卡片</a>
+    <a href="#s5">05 词汇扩展 · 三道式西餐</a>
+    <div class="part">PART C · 课件逐页精讲</div>
+    <a href="#s6">06 Dialog 精读 · Emma 点龙虾</a>
+    <a href="#s7">07 Conversation 填空预演 · 服务员 George</a>
+    <a href="#s8">08 Discussion 三问 · 双版本答案</a>
+    <div class="part">PART D · 功能句与复盘</div>
+    <a href="#s9">09 实用功能句 · 点餐流水线</a>
+    <a href="#s10">10 Further Study · 三道菜文化</a>
+    <a href="#s11">11 高频错误预测</a>
+    <a href="#s12">12 仿写短文 · 本课词汇实战</a>
+    <a href="#golden">13 一句话带走</a>
+    <a href="#s14">14 五步预习清单</a>
+  </nav>
+
+  <main>
+
+    <div class="path">
+      <div><div class="p-k">A · 须知</div><div class="p-t">目标与流程</div><div class="p-d">带着地图去上课</div></div>
+      <div><div class="p-k">B · 词汇</div><div class="p-t">4 主词 + 10 扩展</div><div class="p-d">先混个脸熟</div></div>
+      <div><div class="p-k">C · 精讲</div><div class="p-t">对话 + 填空 + 3 问</div><div class="p-d">版本 1 + 背诵版</div></div>
+      <div><div class="p-k">D · 复盘</div><div class="p-t">功能句 + 避坑</div><div class="p-d">背 2 句就够本</div></div>
+    </div>
+
+    <div class="callout teal">
+      <b>本手册的三类来源</b>　<span class="badge">教材</span> 课件截图原文（问题、释义、对话均逐页取自课件）　<span class="badge teach">预习重点</span> 参考答案与讲解（按惯例：版本 1 标准版 + 版本 2 背诵版）　<span class="badge ext">扩充</span> AI 补充的搭配、辨析与文化。<b>注意</b>：课件截图分辨率较低，个别句子已标<em>「存疑」</em>并按上下文重构，上课时以实际课件为准。
+    </div>
+
+    <!-- 01 -->
+    <section id="s1">
+      <div class="sec-h"><span class="sec-n">PART A · 01</span><h2>课程信息与学习目标</h2><span class="when">课件 P1–2 · Contents</span></div>
+      <p class="sec-lead">本课进入<b>新单元 Chapter 2 Dining（用餐）</b>，主题是<b>在餐厅点餐</b>。三个目标：<b>点餐词汇（4 主词）→ 餐厅功能句（May I take your order? 等）→ 讨论外出就餐与健康饮食</b>。这是典型的「听说学练课」——课上要分角色朗读和大量开口，预习时把对话和问答答案读熟最划算。</p>
+
+      <div class="blk" data-src="text">
+        <div class="blk-h"><span class="t">课件 Contents 与学习目标（原文，2026-10-14 高清重读已校准）</span><span class="badge">教材</span></div>
+        <div class="blk-b">
+          <div class="sent en"><span class="n">A</span><b>Part A · Let's Learn</b> (12 mins)</div>
+          <div class="sent en"><span class="n">B</span><b>Part B · Let's Talk</b> (12 mins)</div>
+          <div class="sent en"><span class="n">C</span><b>Part C · Review</b> (1 min)</div>
+          <div class="sent en"><span class="n">★</span><b>Learning Objectives 学习目标：</b></div>
+          <div class="sent en"><span class="n">1</span>4 words/phrases about restaurants — 4 个和餐馆相关的单词</div>
+          <div class="sent en"><span class="n">2</span>Expressions for restaurants — 关于餐馆的常用表达</div>
+          <div class="sent en"><span class="n">3</span>How to talk about restaurant-related topics — 谈论和餐馆相关的话题</div>
+        </div>
+      </div>
+
+      <div class="blk" data-src="teach">
+        <div class="blk-h"><span class="t">预习提示 · 本课最重要的一件事</span><span class="badge teach">预习重点</span></div>
+        <div class="blk-b">
+          本课核心就一句：<b>「服务员问 → 你答」的流水线：May I take your order? → Do you have any specials? → I'll take it.</b>
+          <div class="en" style="font-weight:700;color:var(--teal);margin-top:6px">— May I take your order?　— Yes. Do you have any specials tonight?　— Of course! We are offering lobster for only twenty dollars.　— OK! I'll take it!</div>
+          <div class="muted" style="margin-top:5px">这是课件 Dialog 页的骨架（Waiter + Emma），把这三句背到脱口而出，课上 Conversation 填空和角色扮演就全有底了。另外注意串课：<b>offer 是 L11（Online Shopping）刚考过的真题词</b>（We offer free delivery and free repair…），本课把它搬进餐厅——「提供」这个用法一课打通两个场景。</div>
+        </div>
+      </div>
+
+      <div class="blk" data-src="ext">
+        <div class="blk-h"><span class="t">和已学课程的衔接</span><span class="badge ext">扩充</span></div>
+        <div class="blk-b">
+          <div>· <b>L11 Online Shopping（2026-10-10）</b>：order / deal / original / discount——order 本课在餐厅语境「点餐」复现，一词两义。</div>
+          <div>· 同桌教材 <b>A2-L15 餐厅预订餐桌 / A2-L16 餐厅点餐</b>：已练过 a table for two / Are you ready to order?，本课是同场景的升级版（specials、free of charge 等新表达）。</div>
+          <div>· 老师近两课都习惯让学员<b>朗读课件对话 + 逐题讨论</b>，并会在聊天框发提示句——预习手册里的双版本答案照旧准备。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section id="s2">
+      <div class="sec-h"><span class="sec-n">PART A · 02</span><h2>课件流程一览</h2><span class="when">课件 P1 · Contents（2026-10-14 高清重读已校准）</span></div>
+      <p class="sec-lead">全课三大板块：<b>Let's Learn（12 mins）讲词汇和对话，Let's Talk（12 mins）做 Conversation 填空和 Discussion 讨论，Review（1 min）收尾</b>。课末还有 Further Study 词汇扩展音频。</p>
+
+      <div class="blk" data-src="text">
+        <div class="blk-h"><span class="t">课堂环节与时间（课件原文）</span><span class="badge">教材</span></div>
+        <div class="blk-b">
+          <div class="sent en"><span class="n">1</span><b>Part A · Let's Learn</b> · 12 mins · Vocabulary（3 mins + 4 mins：free of charge / main course / special / offer）＋ Dialog（4 mins，角色朗读 ×2）</div>
+          <div class="sent en"><span class="n">2</span><b>Part B · Let's Talk</b> · 12 mins · Conversation（3 mins：补全对话）＋ Discussion（3 mins × 3 页：三问讨论）</div>
+          <div class="sent en"><span class="n">3</span><b>Part C · Review</b> · 1 min · 本课 4 词 + 常用表达复盘</div>
+          <div class="sent en"><span class="n">4</span><b>Further Study</b> · 课后 · Listen and Learn：appetizer / entrée / dessert 三道式西餐 + 牛排熟度（配课后音频）</div>
+        </div>
+      </div>
+
+      <div class="blk" data-src="teach">
+        <div class="blk-h"><span class="t">时间分配怎么读</span><span class="badge teach">预习重点</span></div>
+        <div class="blk-b">Let's Talk 12 分钟几乎全在「说」：3 分钟 Conversation 补全对话（答案在课件下一页），Discussion 三问每问约 3 分钟都要答。<b>预习收益最大的是 08 节的三问双版本答案</b>——课上老师大概率让你先答一版，再带你优化。</div>
+      </div>
+    </section>
+
+    <!-- 03 -->
+    <section id="s3">
+      <div class="sec-h"><span class="sec-n">PART B · 03</span><h2>词汇总表 · 4 主词 + 点餐扩展词</h2><span class="when">课件 Vocabulary 页 + Dialog / Further Study</span></div>
+      <p class="sec-lead">前 4 行是<b>课件 Vocabulary 页的 4 个主词</b>（课堂抢答素材：英文解释原文要能读顺）；后 10 条来自 Dialog 和 Further Study 页，帮你看懂整段对话。</p>
+
+      <div class="tbl-wrap">
+        <div class="tbl-tools">
+          <input id="tq" type="text" placeholder="筛选词条…">
+          <span class="faint" id="tcount"></span>
+        </div>
+        <table id="vt">
+          <thead><tr>
+            <th>词条</th><th>中文</th>
+            <th>英文解释<span class="badge" style="margin-left:6px;background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4);color:#fff">教材</span></th>
+            <th>同义扩充<span class="badge ext" style="margin-left:6px;border-color:rgba(255,255,255,.6);color:#fff">扩充</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="w en">free of charge</td><td>免费</td><td class="en col-text">without having to pay</td><td class="en col-ext">for free · at no cost</td></tr>
+            <tr><td class="w en">main course</td><td>主菜</td><td class="en col-text">the largest or most important part of a meal in which there are different parts served separately</td><td class="en col-ext">main dish · entree（美式）</td></tr>
+            <tr><td class="w en">special</td><td>n. 特色菜；特价菜</td><td class="en col-text">a dish that is available in the restaurant on a particular day that is not usually available</td><td class="en col-ext">today's specials · chef's special · specialty（长期招牌菜）</td></tr>
+            <tr><td class="w en">offer</td><td>v. 提供，给</td><td class="en col-text">to provide or supply something</td><td class="en col-ext">provide · serve · offer sb sth = offer sth to sb</td></tr>
+            <tr><td class="w en">order</td><td>v. 点餐；n. 点的东西/订单</td><td class="en col-text">to request food or drinks in a restaurant（L11「订购」的餐厅义项）</td><td class="en col-ext">take one's order · place an order</td></tr>
+            <tr><td class="w en">appetizer</td><td>n. 前菜，开胃菜</td><td class="en col-text">a small dish at the beginning of a meal（Further Study）</td><td class="en col-ext">starter（英式）</td></tr>
+            <tr><td class="w en">dessert</td><td>n. 甜品</td><td class="en col-text">sweet food served at the end of a meal（Further Study）</td><td class="en col-ext">sweet · pudding（英式口语）</td></tr>
+            <tr><td class="w en">lobster</td><td>n. 龙虾</td><td class="en col-text">a sea animal with a shell and two large claws（Dialog：今晚特色菜）</td><td class="en col-ext">seafood · shrimp 虾 · crab 蟹</td></tr>
+            <tr><td class="w en">salmon</td><td>n. 三文鱼</td><td class="en col-text">a large fish with pink flesh（Conversation 主菜候选）</td><td class="en col-ext">smoked salmon 烟熏三文鱼 · grilled 烤的</td></tr>
+            <tr><td class="w en">bread and butter</td><td>面包（配黄油）</td><td class="en col-text">slices of bread with butter, often served free before the meal（Dialog）</td><td class="en col-ext">习语：one's bread and butter = 谋生之道</td></tr>
+            <tr><td class="w en">menu</td><td>n. 菜单</td><td class="en col-text">a list of dishes available in a restaurant</td><td class="en col-ext">May I see the menu? · à la menu</td></tr>
+            <tr><td class="w en">waiter</td><td>n. 服务员</td><td class="en col-text">a man who serves food at tables in a restaurant</td><td class="en col-ext">waitress 女服务员 · server（中性）</td></tr>
+            <tr><td class="w en">beverage</td><td>n. 饮品</td><td class="en col-text">any drink（Further Study 页主题词 order food and beverages）</td><td class="en col-ext">drink · soft drink 软饮</td></tr>
+            <tr><td class="w en">recommend</td><td>v. 推荐</td><td class="en col-text">to say something is good and worth trying</td><td class="en col-ext">What do you recommend? · recommendation n.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 04 -->
+    <section id="s4">
+      <div class="sec-h"><span class="sec-n">PART B · 04</span><h2>词汇精讲 · 4 张卡片</h2><span class="when">课件 Vocabulary 页 · 每卡 = 音标 → 双语释义 → 3 例句（含从句）→ 搭配 → 辨析 → 词形</span></div>
+      <p class="sec-lead">按「课件模版」体例精讲：先读<b>课件英文释义原文</b>（课堂讲解素材），再过 3 个例句，最后看辨析防混淆。每张卡的例句都刻意带了从句，可直接当口语句子用。</p>
+
+      <h3 class="sub">第 1 卡 · free of charge 免费</h3>
+      <div class="wordcard">
+        <div class="wc-l">
+          <div class="idx"><span>WORD 1 / 4</span><span class="badge" style="border-color:rgba(255,255,255,.55);color:#fff">教材</span></div>
+          <div class="w en" style="font-size:24px">free of charge</div>
+          <div class="ph en">/ˌfriː əv ˈtʃɑːdʒ/ · 短语（形容词/副词性）</div>
+          <div class="def">分文不取；免费。比 free 更正式，多放在 be 动词后作表语或动词后作状语。</div>
+          <div class="cite">
+            <div style="font-size:13px;font-weight:700;color:#fff;display:flex;justify-content:space-between;align-items:center"><span>课件释义 + 例句</span></div>
+            <div class="en" style="font-size:14.5px;color:#fff;margin-top:4px">without having to pay</div>
+            <div class="en" style="font-size:13.5px;color:#DDEDE8;margin-top:4px">e.g. These leaflets (传单) are offered free of charge.</div>
+          </div>
+        </div>
+        <div class="wc-r">
+          <div class="blk" data-src="text">
+            <div class="blk-h"><span class="t">英文释义 2 条</span><span class="badge">教材</span></div>
+            <div class="blk-b en">1. without having to pay（无需付款）<br>2. provided at no cost to the customer（免费提供给顾客）</div>
+          </div>
+          <div class="blk" data-src="teach">
+            <div class="blk-h"><span class="t">3 例句（含从句，可直接口语用）</span><span class="badge teach">预习重点</span></div>
+            <div class="blk-b">
+              <div class="sent en"><span class="n">1</span>These leaflets are offered free of charge, so you can take as many as you like. 这些传单免费发放，你想拿多少张都行。<span class="cn">课件例句扩写</span></div>
+              <div class="sent en"><span class="n">2</span>The waiter told us that bread and butter is free of charge in this restaurant. 服务员告诉我们，这家店的面包黄油是免费的。</div>
+              <div class="sent en"><span class="n">3</span>You can park free of charge if you spend more than one hundred yuan in the restaurant. 在餐厅消费满 100 元就可以免费停车。</div>
+            </div>
+          </div>
+          <div class="blk" data-src="ext">
+            <div class="blk-h"><span class="t">搭配与辨析</span><span class="badge ext">扩充</span></div>
+            <div class="blk-b">
+              <div class="en"><b>free of charge</b> = 正式、强调「分文不取」：be offered free of charge（本课课件搭配）</div>
+              <div class="en"><b>for free</b> = 口语版：I got the bread for free.</div>
+              <div class="en"><b>free</b>（adj.）= 免费的：The bread is free. / free parking——三种说法一回事，别混搭成 ✗ for free of charge。</div>
+            </div>
+          </div>
+          <div class="blk" data-src="ext">
+            <div class="blk-h"><span class="t">词形家族 · charge</span><span class="badge ext">扩充</span></div>
+            <div class="blk-b en">charge n. 费用（service charge 服务费 · free of charge 免费）→ v. 收费（How much do you charge? 你们怎么收费？）→ in charge 负责（Who is in charge here?）——一个 charge 三场景，都是高频考点。</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub">第 2 卡 · main course 主菜</h3>
+      <div class="wordcard">
+        <div class="wc-l" style="background:#17554C">
+          <div class="idx"><span>WORD 2 / 4</span><span class="badge" style="border-color:rgba(255,255,255,.55);color:#fff">教材</span></div>
+          <div class="w en" style="font-size:24px">main course</div>
+          <div class="ph en">/ˌmeɪn ˈkɔːs/ · n. 名词短语</div>
+          <div class="def">一顿分道上菜的正餐中最主要的那道菜。西餐三道式：appetizer 前菜 → main course 主菜 → dessert 甜品。</div>
+          <div class="cite">
+            <div style="font-size:13px;font-weight:700;color:#fff;display:flex;justify-content:space-between;align-items:center"><span>课件释义 + 例句</span></div>
+            <div class="en" style="font-size:14.5px;color:#fff;margin-top:4px">the largest or most important part of a meal in which there are different parts served separately</div>
+            <div class="en" style="font-size:13.5px;color:#DDEDE8;margin-top:4px">e.g. I had salmon (三文鱼) for my main course.</div>
+          </div>
+        </div>
+        <div class="wc-r">
+          <div class="blk" data-src="text">
+            <div class="blk-h"><span class="t">英文释义 2 条</span><span class="badge">教材</span></div>
+            <div class="blk-b en">1. the largest or most important part of a meal in which there are different parts served separately（课件原文）<br>2. the main dish of a meal, served after the appetizer（前菜之后上场的主体菜）</div>
+          </div>
+          <div class="blk" data-src="teach">
+            <div class="blk-h"><span class="t">3 例句（含从句）</span><span class="badge teach">预习重点</span></div>
+            <div class="blk-b">
+              <div class="sent en"><span class="n">1</span>I had salmon for my main course. 我主菜吃的是三文鱼。<span class="cn">课件例句</span></div>
+              <div class="sent en"><span class="n">2</span>In most western countries, a full meal consists of an appetizer, a main course and a dessert. 在大多数西方国家，一顿正餐由前菜、主菜和甜品组成。</div>
+              <div class="sent en"><span class="n">3</span>What would you like to have for your main course, the steak or the roast chicken? 您主菜想要什么，牛排还是烤鸡？</div>
+            </div>
+          </div>
+          <div class="blk" data-src="ext">
+            <div class="blk-h"><span class="t">辨析 · course vs dish vs meal</span><span class="badge ext">扩充</span></div>
+            <div class="blk-b">
+              <div class="en"><b>course</b> = 一「道」菜（上菜顺序中的一道）：a three-course meal 三道式</div>
+              <div class="en"><b>dish</b> = 一「盘」具体的菜：My favorite dish is Kung Pao Chicken.</div>
+              <div class="en"><b>meal</b> = 一「顿」饭：have a big meal——点餐时问 What would you like for your main course? 是最地道的问法。</div>
+            </div>
+          </div>
+          <div class="blk" data-src="ext">
+            <div class="blk-h"><span class="t">词形家族 · course 一词多义</span><span class="badge ext">扩充</span></div>
+            <div class="blk-b en">course = 一道菜（main course）/ 课程（take an English course 修一门课）/ of course 当然——听力里靠语境区分。</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub">第 3 卡 · special 特色菜（n.）</h3>
+      <div class="wordcard">
+        <div class="wc-l" style="background:#8A4B2A">
+          <div class="idx"><span>WORD 3 / 4</span><span class="badge" style="border-color:rgba(255,255,255,.55);color:#fff">教材</span></div>
+          <div class="w en" style="font-size:26px">special</div>
+          <div class="ph en">/ˈspeʃl/ · n. 特色菜；adj. 特别的</div>
+          <div class="def">餐厅某天限时供应、平时菜单上没有的菜。点餐语境里 special 是<b>可数名词</b>，常以复数 specials 出现。</div>
+          <div class="cite">
+            <div style="font-size:13px;font-weight:700;color:#fff;display:flex;justify-content:space-between;align-items:center"><span>课件释义 + 例句</span></div>
+            <div class="en" style="font-size:14.5px;color:#fff;margin-top:4px">a dish that is available in the restaurant on a particular day that is not usually available</div>
+            <div class="en" style="font-size:13.5px;color:#DDEDE8;margin-top:4px">e.g. Today's specials are written on the board.</div>
+          </div>
+        </div>
+        <div class="wc-r">
+          <div class="blk" data-src="text">
+            <div class="blk-h"><span class="t">英文释义 2 条</span><span class="badge">教材</span></div>
+            <div class="blk-b en">1. a dish that is available in the restaurant on a particular day that is not usually available（课件原文）<br>2. a special price or deal offered for a limited time（限时特价）</div>
+          </div>
+          <div class="blk" data-src="teach">
+            <div class="blk-h"><span class="t">3 例句（含从句）</span><span class="badge teach">预习重点</span></div>
+            <div class="blk-b">
+              <div class="sent en"><span class="n">1</span>Today's specials are written on the board. 今日特色菜写在黑板上。<span class="cn">课件例句</span></div>
+              <div class="sent en"><span class="n">2</span>Tonight we are offering a special: lobster for only twenty dollars. 今晚我们有一道特色菜：龙虾只要 20 美元。<span class="cn">串 Dialog 页</span></div>
+              <div class="sent en"><span class="n">3</span>The waiter recommended the chef's special, which is not on the normal menu. 服务员推荐了主厨特色菜，普通菜单上没有这道菜。</div>
+            </div>
+          </div>
+          <div class="blk" data-src="ext">
+            <div class="blk-h"><span class="t">辨析 · special vs specialty</span><span class="badge ext">扩充</span></div>
+            <div class="blk-b">
+              <div class="en"><b>special</b>（n.）= 限时特色/特价菜，天天可能换：Do you have any specials tonight?（本课功能句！）</div>
+              <div class="en"><b>specialty / speciality</b> = 长期招牌菜、拿手菜：Peking duck is this restaurant's specialty.——一个是「限时」，一个是「招牌」，都和「特别」有关。</div>
+            </div>
+          </div>
+          <div class="blk" data-src="ext">
+            <div class="blk-h"><span class="t">词形家族</span><span class="badge ext">扩充</span></div>
+            <div class="blk-b en">special adj. 特别的 → specially adv. 专门地 → especially adv. 尤其（L11 Further Study 短文原词！）→ specialist n. 专家。注意 specially = 专门（为某个目的），especially = 尤其（强调突出）。</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub">第 4 卡 · offer 提供</h3>
+      <div class="wordcard">
+        <div class="wc-l" style="background:#3D5A80">
+          <div class="idx"><span>WORD 4 / 4</span><span class="badge" style="border-color:rgba(255,255,255,.55);color:#fff">教材</span></div>
+          <div class="w en" style="font-size:26px">offer</div>
+          <div class="ph en">/ˈɒfə(r)/ · v. 提供，给；n. 提议；出价</div>
+          <div class="def">主动提出给某人某物（对方可接受可拒绝）。双宾语结构：<b>offer sb sth = offer sth to sb</b>。</div>
+          <div class="cite">
+            <div style="font-size:13px;font-weight:700;color:#fff;display:flex;justify-content:space-between;align-items:center"><span>课件释义 + 例句</span></div>
+            <div class="en" style="font-size:14.5px;color:#fff;margin-top:4px">to provide or supply something</div>
+            <div class="en" style="font-size:13.5px;color:#DDEDE8;margin-top:4px">e.g. The hotel offers guests free use of the swimming pool.（截图低清，按图意重构，存疑）</div>
+          </div>
+        </div>
+        <div class="wc-r">
+          <div class="blk" data-src="text">
+            <div class="blk-h"><span class="t">英文释义 2 条</span><span class="badge">教材</span></div>
+            <div class="blk-b en">1. to provide or supply something（课件原文：提供、供给）<br>2. to say that you are willing to give someone something（主动愿意给予）</div>
+          </div>
+          <div class="blk" data-src="teach">
+            <div class="blk-h"><span class="t">3 例句（含从句）</span><span class="badge teach">预习重点</span></div>
+            <div class="blk-b">
+              <div class="sent en"><span class="n">1</span>The hotel offers guests free use of the swimming pool. 这家酒店为客人提供免费使用泳池的服务。<span class="cn">课件例句（存疑重构）</span></div>
+              <div class="sent en"><span class="n">2</span>Tonight we are offering lobster for only twenty dollars. 今晚我们的龙虾只卖 20 美元。<span class="cn">课件 Dialog 原句</span></div>
+              <div class="sent en"><span class="n">3</span>We offer free delivery and free repair if the product is still under warranty. 如果商品还在保修期内，我们提供免费送货和免费维修。<span class="cn">L11 真题原句——offer 的串课复习</span></div>
+            </div>
+          </div>
+          <div class="blk" data-src="ext">
+            <div class="blk-h"><span class="t">辨析 · offer vs provide vs give</span><span class="badge ext">扩充</span></div>
+            <div class="blk-b">
+              <div class="en"><b>offer</b> = 主动给（对方可以拒绝）：He offered me a drink, but I said no.</div>
+              <div class="en"><b>provide / supply</b> = （客观）供应、提供：The restaurant provides free Wi-Fi.</div>
+              <div class="en"><b>give</b> = 一般的给：give me the menu——点餐句里 offer sth for only $20（以某价提供）是本课重点搭配。</div>
+            </div>
+          </div>
+          <div class="blk" data-src="ext">
+            <div class="blk-h"><span class="t">搭配与词形</span><span class="badge ext">扩充</span></div>
+            <div class="blk-b en">offer sb sth = offer sth to sb · offer a discount 提供折扣 · on offer 在售/打折中 · make an offer 出价（购物砍价语境，L11 bargain 家族）· 变形：offer–offered–offering（辅音双写 r）。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section id="s5">
+      <div class="sec-h"><span class="sec-n">PART B · 05</span><h2>词汇扩展 · 三道式西餐与点餐词</h2><span class="when">课件 Further Study 页 + Dialog</span></div>
+      <p class="sec-lead">Further Study 的三张图就是<b>西餐上菜顺序</b>：appetizer → main course → dessert。把这条「链条」记熟，课上老师问西方饮食文化时你就是全场最懂的那个。</p>
+
+      <div class="blk" data-src="text">
+        <div class="blk-h"><span class="t">Further Study · 三道菜（课件原文）</span><span class="badge">教材</span></div>
+        <div class="blk-b">
+          <div class="sent en"><span class="n">1</span><b>appetizer</b> 前菜，开胃菜（英式常说 starter）— meal 开始时的小份菜</div>
+          <div class="sent en"><span class="n">2</span><b>main course</b> 主菜 — 餐的主体（本课主词第 2 卡）</div>
+          <div class="sent en"><span class="n">3</span><b>dessert</b> 甜品 — 餐后甜食（cake, ice cream…）</div>
+          <div class="sent"><span class="n">＊</span>课件说明：In most western countries, waiters ask what you would like to order… a full meal consists of an appetizer, a main course and dessert.<span style="color:var(--faint)">（截图低清，句式重构，存疑）</span></div>
+        </div>
+      </div>
+
+      <div class="blk" data-src="ext">
+        <div class="blk-h"><span class="t">点餐场景高频词补充（对话会用到）</span><span class="badge ext">扩充</span></div>
+        <div class="blk-b">
+          <div class="en">· steak 牛排 · roast chicken 烤鸡 · grilled 烤的 · fried 炸的 · seafood 海鲜</div>
+          <div class="en">· side dish 配菜 · soup of the day 例汤 · set meal / combo 套餐</div>
+          <div class="en">· bill（英式）= check（美式）账单：Could we have the bill, please? · tip 小费（欧美文化：一般 10–20%）</div>
+          <div class="en">· rare / medium / well-done 牛排熟度三分/五分/全熟——西餐厅服务员必问。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section id="s6">
+      <div class="sec-h"><span class="sec-n">PART C · 06</span><h2>Dialog 精读 · Emma 点龙虾</h2><span class="when">课件 Dialog 页 · 课堂将逐句朗读讲解</span></div>
+      <p class="sec-lead">课件要求：<b>请老师一句一句朗读并解释以下对话</b>（原句低清，此条按版式重构，存疑）。场景是<b>晚餐时间的餐厅</b>。先自己读一遍气泡对话，再看下面的逐句讲解。</p>
+
+      <div class="dlg">
+        <div class="crow"><div class="bub"><div class="who">Waiter 服务员</div><span class="en">Good evening. May I take your order?</span><span class="cn">晚上好。请问可以点餐了吗？</span></div></div>
+        <div class="crow r"><div class="bub"><div class="who">Emma</div><span class="en">Yes. Could we have some bread first? I want to know whether bread and butter is free of charge.</span><span class="cn">好的。能先来点面包吗？我想问问面包黄油是不是免费的。</span><span style="display:block;font-size:11px;color:var(--faint)">截图低清，按对话逻辑重构，存疑</span></div></div>
+        <div class="crow"><div class="bub"><div class="who">Waiter 服务员</div><span class="en">Yes, bread and butter is free. Are you interested in a main course?</span><span class="cn">是的，面包黄油免费。请问需要主菜吗？</span></div></div>
+        <div class="crow r"><div class="bub"><div class="who">Emma</div><span class="en">Yes. Do you have any specials tonight?</span><span class="cn">需要。今晚有什么特色菜吗？</span></div></div>
+        <div class="crow"><div class="bub"><div class="who">Waiter 服务员</div><span class="en">Of course! Tonight we are offering lobster (龙虾) for only twenty dollars.</span><span class="cn">当然有！今晚我们的特色是龙虾，只要 20 美元。</span></div></div>
+        <div class="crow r"><div class="bub"><div class="who">Emma</div><span class="en">OK! I'll take it!</span><span class="cn">好！就要它了！</span></div></div>
+      </div>
+
+      <div class="blk" data-src="teach">
+        <div class="blk-h"><span class="t">逐句讲解 · 3 个必抓语言点</span><span class="badge teach">预习重点</span></div>
+        <div class="blk-b">
+          <div class="sent"><span class="n">1</span><b>May I take your order?</b> — may 比 can 更礼貌，服务员的标准开场白。order 在这里是名词「所点的餐」；take one's order = 帮客人记下点什么。回答直接说 <b>Yes, I'd like the steak.</b> 或先问 <b>Do you have any specials?</b></div>
+          <div class="sent"><span class="n">2</span><b>Are you interested in a main course?</b> — be interested in + 名词/v-ing（对……感兴趣→想要……吗），比 Do you want… 委婉，是服务员推荐话术。</div>
+          <div class="sent"><span class="n">3</span><b>I'll take it!</b> — will 表<b>即时决定</b>（L11 学过：will 临时决定 vs be going to 计划）。点餐、买东西当场拍板都用 I'll take it / I'll have it。</div>
+        </div>
+      </div>
+
+      <div class="blk" data-src="ext">
+        <div class="blk-h"><span class="t">朗读小贴士</span><span class="badge ext">扩充</span></div>
+        <div class="blk-b">
+          <div class="en">· May I 弱读连读：/meɪaɪ/；take your order 里 take your 连成 /teɪkjər/。</div>
+          <div class="en">· Of course! 的语调上扬表热情；Tonight we are offering… 重音落在 lobster 和 twenty dollars。</div>
+          <div class="en">· 角色扮演时服务员用升调问句，顾客答句降调收尾——老师大概率要求分角色读，提前进入状态。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 -->
+    <section id="s7">
+      <div class="sec-h"><span class="sec-n">PART C · 07</span><h2>Conversation 填空预演 · 服务员 George</h2><span class="when">课件 Conversation 页 · 3 mins · 补全对话（答案在课件下一页）</span></div>
+      <p class="sec-lead">课件玩法：假设你在餐厅，运用 Part A 学到的词汇表达补全对话。<b>注意：George 是服务员（I'll be your waiter），不是顾客！</b>课件 Hints 给了 5 个词条，正好对应 5 个空。本节序号与答案同时呈现——先自己试填，再对照。</p>
+
+      <div class="blk" data-src="text">
+        <div class="blk-h"><span class="t">对话填空（课件原文，2026-10-14 高清重读已校准）</span><span class="badge">教材</span></div>
+        <div class="blk-b">
+          <div class="sent en"><span class="n">A</span>Hi, I'm George. I'll be your waiter this evening. <b>①<mark>Are you ready to order?</mark></b> or do you need a few more minutes?</div>
+          <div class="sent en"><span class="n">B</span>I'm ready. I would like to have the mixed salad (综合沙拉).</div>
+          <div class="sent en"><span class="n">A</span>Ok. What would you like to have for the <b>②<mark>main course</mark></b>?</div>
+          <div class="sent en"><span class="n">B</span>Well. <b>③<mark>Do you have any specials?</mark></b></div>
+          <div class="sent en"><span class="n">A</span>Yes. We are <b>④<mark>offering</mark></b> the roast chicken with vegetables tonight.</div>
+          <div class="sent en"><span class="n">B</span>I'll have it! And I think the soup is <b>⑤<mark>free of charge</mark></b>?</div>
+          <div class="sent en"><span class="n">A</span>Yes, it's free.</div>
+          <div class="sent"><span class="n">＊</span>课件 Hints：main course · offer · free of charge · Are you ready to order? · Do you have any specials?</div>
+          <div class="sent"><span class="n">＊</span>课件下一页 Key：Are you ready to order / main course / Do you have any specials / offering / free of charge</div>
+        </div>
+      </div>
+
+      <div class="blk" data-src="teach">
+        <div class="blk-h"><span class="t">逐空思路（与课件 Key 核对一致）</span><span class="badge teach">预习重点</span></div>
+        <div class="blk-b">
+          <div class="sent"><span class="n">①</span><b>Are you ready to order?</b> — 后句 or do you need a few more minutes? 是二选一，前句必是「现在点单吗」；George 是服务员，站在服务员立场问。</div>
+          <div class="sent"><span class="n">②</span><b>main course</b> — 顾客已点 mixed salad（前菜），服务员接着问主菜；for the main course 固定问法。</div>
+          <div class="sent"><span class="n">③</span><b>Do you have any specials?</b> — 下一句以 Yes 开头，说明这里是问句；问特色菜正好引出烤鸡推荐。specials 用复数。</div>
+          <div class="sent"><span class="n">④</span><b>offering</b> — 空前是 We are，需 -ing 构成现在进行时，表「今晚特供」；＝主词 offer。</div>
+          <div class="sent"><span class="n">⑤</span><b>free of charge</b> — 答语 Yes, it's free. 反向确认；＝主词 free of charge。</div>
+        </div>
+      </div>
+
+      <div class="blk" data-src="ext">
+        <div class="blk-h"><span class="t">填空预演策略</span><span class="badge ext">扩充</span></div>
+        <div class="blk-b">先通读一遍判断<b>每空说话人是谁</b>：①②④是服务员（George）的台词，③⑤是顾客的台词。再抓三类信号词：<b>菜名</b>（mixed salad, roast chicken）、<b>答句反推</b>（Yes, it's free → 免费问句；Yes. We are… → 一般疑问句）、<b>Hints 词条逐一归位</b>——5 个词条与 5 个空一一对应，填完无剩余即对。</div>
+      </div>
+    </section>
+
+    <!-- 08 -->
+    <section id="s8">
+      <div class="sec-h"><span class="sec-n">PART C · 08</span><h2>Discussion 三问 · 双版本答案</h2><span class="when">课件 Discussion 页 · 3 mins × 3 问 · 惯例：版本 1 标准版（带从句）+ 版本 2 背诵版</span></div>
+      <p class="sec-lead">三问的 Hints 全部来自课件原文。先自己答一版，再背<b>版本 2 背诵版</b>，最后合上书用关键词复述一遍。</p>
+
+      <div class="blk" data-search data-src="text">
+        <div class="blk-h"><span class="t en">Q1 · How often do you eat at restaurants? Why? Who do you usually go with when you eat at restaurants?</span><span class="badge">教材</span></div>
+        <div class="blk-b">
+          <div class="muted" style="margin-bottom:6px"><b>课件 Hints</b>：once / twice / three times a week / month / year　·　seldom → love to eat at home / it's cheaper and healthier　·　with parents / friends / colleagues (同事)。旁注：eat out · nicer · enjoy the atmosphere · try new things · save time/energy。</div>
+          <div class="ans v1 en"><span class="lab">版本 1 · 标准版</span><br>I eat at restaurants about twice a month, usually with my family or friends. We eat out when we want to celebrate something or when I am too busy to cook. Going to restaurants helps me enjoy the atmosphere and try new dishes, which I cannot make at home. But it costs more than eating at home, so I don't go every week.</div>
+          <div class="ans v2 en"><span class="lab">版本 2 · 背诵版</span><br>About twice a month, usually with my family. It's a nice way to celebrate and save time, but it's more expensive than eating at home.</div>
+        </div>
+      </div>
+
+      <div class="blk" data-search data-src="text">
+        <div class="blk-h"><span class="t en">Q2 · Do you like to try new restaurants, or do you prefer to go to those you have already been to? Why?</span><span class="badge">教材</span></div>
+        <div class="blk-b">
+          <div class="muted" style="margin-bottom:6px"><b>课件 Hints</b>：new ones → taste different dishes / have new experiences / learn about new cuisines and new cultures　·　always the same → already familiar with the environment and dishes / save myself time from thinking about what to order / avoid food I dislike。</div>
+          <div class="ans v1 en"><span class="lab">版本 1 · 标准版（选「尝新」）</span><br>I prefer to try new restaurants, because I can taste different dishes and learn about new cuisines and cultures. Every new restaurant is a new experience — sometimes I discover a dish that becomes my favorite. Of course, familiar restaurants are safer because I already know the menu, but I think trying new things makes life more interesting.</div>
+          <div class="ans v1 en"><span class="lab">版本 1 · 标准版（选「熟店」）</span><br>I prefer to go to restaurants that I have already been to. I am already familiar with the environment and the dishes, so I can save myself time from thinking about what to order. Besides, I can avoid food that I dislike, which makes eating out more relaxing for me.</div>
+          <div class="ans v2 en"><span class="lab">版本 2 · 背诵版</span><br>I like trying new ones because I can taste different dishes and have new experiences. But when I just want a relaxing meal, I go to my usual place.</div>
+        </div>
+      </div>
+
+      <div class="blk" data-search data-src="text">
+        <div class="blk-h"><span class="t en">Q3 · Some experts say that most people have unhealthy eating habits. Do you agree or disagree? Do you know how to develop healthy eating habits?</span><span class="badge">教材</span></div>
+        <div class="blk-b">
+          <div class="muted" style="margin-bottom:6px"><b>课件 Hints</b>：healthy eating habits → eat "real foods" such as vegetables, fruits and nuts / avoid artificial foods (人造食品) / keep a food journal / eat meals regularly (规律地) each day。</div>
+          <div class="ans v1 en"><span class="lab">版本 1 · 标准版</span><br>I agree that many people have unhealthy eating habits. Some people often eat fast food and artificial foods because they are quick and cheap, and many of my friends skip breakfast or eat very late at night. To develop healthy eating habits, we should eat "real foods" such as vegetables, fruits and nuts, avoid artificial foods, and eat meals regularly each day. Keeping a food journal also helps, because we can see clearly what we ate and change our habits.</div>
+          <div class="ans v2 en"><span class="lab">版本 2 · 背诵版</span><br>Yes, I agree. Many people eat too much fast food. To eat healthily, we should eat more vegetables, fruits and nuts, avoid artificial foods, and have meals at regular times every day.</div>
+        </div>
+      </div>
+
+      <div class="blk" data-src="teach">
+        <div class="blk-h"><span class="t">答题套路拆解</span><span class="badge teach">预习重点</span></div>
+        <div class="blk-b">三问共用一个结构：<b>直接表态 → 给 1–2 个理由（用 because/which 从句撑长度）→ 可选补一句让步（Of course… / But…）</b>。Q3 课件 Hints 里给的四招（real foods / avoid artificial foods / food journal / eat regularly）是现成的「理由库」，把它们嵌进 because 从句就是高分答案。</div>
+      </div>
+    </section>
+
+    <!-- 09 -->
+    <section id="s9">
+      <div class="sec-h"><span class="sec-n">PART D · 09</span><h2>实用功能句 · 点餐流水线</h2><span class="when">Review 页功能句 + Dialog/Conversation 提炼</span></div>
+      <p class="sec-lead">按「进店 → 点单 → 问推荐 → 拍板」的顺序分组。Review 页明确要求掌握的两句是 <b>May I take your order?</b> 和 <b>Do you have any specials?</b>——这两句是本课的「锚句」，必须背到脱口而出。</p>
+
+      <div class="grp">
+        <div class="gt">① 开场 · 服务员问</div>
+        <div class="sent"><span class="n">1</span><span class="en">May I take your order?</span><span class="cn">可以点餐了吗？（本课锚句）</span></div>
+        <div class="sent"><span class="n">2</span><span class="en">Are you ready to order?</span><span class="cn">您准备好点餐了吗？</span></div>
+        <div class="sent"><span class="n">3</span><span class="en">What would you like to have for your main course?</span><span class="cn">您的主菜想要什么？</span></div>
+      </div>
+      <div class="grp">
+        <div class="gt">② 顾客回应 · 问特色与免费项</div>
+        <div class="sent"><span class="n">1</span><span class="en">Do you have any specials tonight?</span><span class="cn">今晚有特色菜吗？（本课锚句）</span></div>
+        <div class="sent"><span class="n">2</span><span class="en">Is the bread and butter free of charge?</span><span class="cn">面包黄油是免费的吗？</span></div>
+        <div class="sent"><span class="n">3</span><span class="en">What's the most popular dish here?</span><span class="cn">这儿最受欢迎的菜是什么？</span></div>
+      </div>
+      <div class="grp">
+        <div class="gt">③ 服务员推荐</div>
+        <div class="sent"><span class="n">1</span><span class="en">Of course! Tonight we are offering lobster for only twenty dollars.</span><span class="cn">当然有！今晚龙虾特价只要 20 美元。</span></div>
+        <div class="sent"><span class="n">2</span><span class="en">I recommend the salmon. It is delicious with vegetables tonight.</span><span class="cn">我推荐三文鱼，今晚配蔬菜很好吃。</span></div>
+        <div class="sent"><span class="n">3</span><span class="en">Are you interested in a dessert / appetizer?</span><span class="cn">要来份甜品/前菜吗？</span></div>
+      </div>
+      <div class="grp">
+        <div class="gt">④ 拍板下单</div>
+        <div class="sent"><span class="n">1</span><span class="en">OK! I'll take it.</span><span class="cn">好！就要它了。</span></div>
+        <div class="sent"><span class="n">2</span><span class="en">I'll have the roast chicken, please.</span><span class="cn">我要烤鸡。（I'll have… 是点餐万能句）</span></div>
+        <div class="sent"><span class="n">3</span><span class="en">That sounds good. I'll go with your recommendation.</span><span class="cn">听起来不错，就按你推荐的来。</span></div>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section id="s10">
+      <div class="sec-h"><span class="sec-n">PART D · 10</span><h2>Further Study · 三道菜文化与课后音频</h2><span class="when">课件 See you next time + Further Study 页</span></div>
+      <p class="sec-lead">课件结尾提示：<b>「下一页有词汇扩展音频，记得收听！」</b>Further Study 的 Listen and Learn 用三张图讲三道式西餐。这段是课后自学内容，也是下一课可能的抢答点。</p>
+
+      <div class="blk" data-src="teach">
+        <div class="blk-h"><span class="t">三道式西餐一句话版</span><span class="badge teach">预习重点</span></div>
+        <div class="blk-b">
+          <div class="en" style="font-weight:700;color:var(--teal)">A full meal in most western countries has three courses: an appetizer to start, a main course (the biggest dish), and a dessert to finish.</div>
+          <div class="muted" style="margin-top:5px">背这句 = 同时复习 main course + 掌握 Further Study 的文化点。可以用在 Q3 答题里：In western countries, a full meal usually has three courses — an appetizer, a main course and a dessert, and sometimes the main course is too big, which is not very healthy.（把「量大」接进健康话题，一石二鸟。）</div>
+        </div>
+      </div>
+
+      <div class="blk" data-src="ext">
+        <div class="blk-h"><span class="t">文化小贴士</span><span class="badge ext">扩充</span></div>
+        <div class="blk-b">
+          <div>· <b>bill vs check</b>：英国说 bill，美国说 check——Could we have the bill/check, please?</div>
+          <div>· <b>面包黄油</b>：欧美餐厅上桌先送 bread and butter，多数店免费，但有的高级餐厅会收费——本课 Dialog 就在考这个意识。</div>
+          <div>· <b>小费文化</b>：美国餐厅一般给 15–20% 小费；中国和菲律宾不强制——和菲律宾外教聊这个话题很有共鸣。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11 -->
+    <section id="s11">
+      <div class="sec-h"><span class="sec-n">PART D · 11</span><h2>高频错误预测</h2><span class="when">按本课场景 + 往期课堂记录预判</span></div>
+      <p class="sec-lead">根据 L11 课堂转写（时态误用、单复数、时态一致是重灾区）预判本课最容易被点名的错。先自查一遍。</p>
+
+      <div class="trap"><b>Yes, I want eat steak. ✗</b> → <span class="en">Yes, I'd like / I'll have the steak, please.</span>　点餐不用 want to eat，地道说法是 would like 或 will + 动词原形（I'll have = 我要）。</div>
+      <div class="trap"><b>The bread is for free of charge. ✗</b> → <span class="en">The bread is free of charge. / I got it for free.</span>　free of charge 和 for free 二选一，不能混搭。</div>
+      <div class="trap"><b>Do you have any special tonight? （点菜语境）</b> → <span class="en">Do you have any specials tonight?</span>　special 指「特色菜」时是可数名词，any 后面用复数 specials（课件 Review 页原文也是复数）。</div>
+      <div class="trap"><b>We offer to you a discount. ✗</b> → <span class="en">We offer you a discount. / We offer a discount to you.</span>　offer 双宾语：offer sb sth，直接跟人；加 to 时 sth 要在 to 前面。</div>
+    </section>
+
+    <!-- 12 -->
+    <section id="s12">
+      <div class="sec-h"><span class="sec-n">PART D · 12</span><h2>仿写短文 · 本课词汇实战</h2><span class="when">目标表达已高亮</span></div>
+      <p class="sec-lead">把 4 个主词 + 三道式织进一篇小短文（<em>斜体</em>为本课目标表达）。朗读到顺口，然后合上书、只看中文回译一遍。</p>
+
+      <div class="essay" data-search>
+        <div class="essay-t en">Dinner at the New Restaurant</div>
+        <div class="en">Last Friday my friends and I tried a new restaurant downtown. The waiter greeted us and asked, '<em>May I take your order?</em>' Before ordering, I asked whether the bread and butter was <em>free of charge</em> — it was. Then I wanted to know if they had any <em>specials</em>. 'Of course! Tonight we are <em>offering</em> lobster for only twenty dollars,' the waiter said with a smile. For my <em>main course</em> I had the salmon, which came with fresh vegetables. After the meal we shared a chocolate cake for dessert. The whole dinner, from the appetizer to the dessert, was wonderful — and the free bread made it even better.</div>
+        <div class="tr">参考译文：上周五我和朋友试了市中心一家新餐厅。服务员招呼我们并问：「可以点餐了吗？」点单前，我先问面包黄油是不是免费的——是免费的。然后我问有没有特色菜。「当然有！今晚我们的龙虾特价只要 20 美元，」服务员笑着说。主菜我点了三文鱼，配新鲜蔬菜。饭后我们分了一份巧克力蛋糕当甜品。从开胃菜到甜品，整顿饭都很棒——免费面包更是加分。</div>
+      </div>
+    </section>
+
+    <!-- 13 -->
+    <div id="golden" data-search class="callout teal"><span style="font-size:11px;letter-spacing:2px;color:var(--faint);font-weight:700">一句话带走 · TAKEAWAY</span><br><span class="g-en en">Ordering in English is just three moves: 'May I take your order?' — 'Do you have any specials?' — 'I'll take it!'</span><div class="g-cn">英语点餐就三步：可以点了吗 → 有什么特色菜 → 就要它了。背熟这三句，今晚就能用。</div></div>
+
+    <!-- 14 -->
+    <section id="s14">
+      <div class="sec-h"><span class="sec-n">PART D · 14</span><h2>五步预习清单</h2><span class="when">课前 25–35 分钟按顺序过一遍</span></div>
+      <p class="sec-lead">做完第 5 步就可以安心上课。</p>
+      <div class="step"><div class="no">1</div><div><div class="tt">过词汇（5 分钟）</div><div class="dd">词汇总表 14 条每条口头过 3 遍；4 个主词的课件英文释义读到能看懂为止——这是 Vocabulary 环节的抢答素材。</div></div></div>
+      <div class="step"><div class="no">2</div><div><div class="tt">读对话（8 分钟）</div><div class="dd">06 节 Dialog 气泡对话分角色朗读 2 遍（服务员/Emma 各一遍），注意 May I 连读和 Of course! 的热情语调。</div></div></div>
+      <div class="step"><div class="no">3</div><div><div class="tt">试填空（5 分钟）</div><div class="dd">07 节 Conversation 6 个空先自己填，再对参考答案；记住 Guide 六个词都要用上。</div></div></div>
+      <div class="step"><div class="no">4</div><div><div class="tt">背问答（10 分钟）</div><div class="dd">08 节 Discussion 三问：先自己答一版，再背版本 2 背诵版；合上书用关键词复述一遍。</div></div></div>
+      <div class="step"><div class="no">5</div><div><div class="tt">锚句 + 避坑（5 分钟）</div><div class="dd">背两句锚句：May I take your order? / Do you have any specials?；过一遍高频错误预测，重点盯 specials 复数和 free of charge 搭配。</div></div></div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="faint">本手册由上课课件截图（13 页）逐页提取原文后编写 · 学员 Julia · 预习 Lesson 12 In a Restaurant · 制作于 2026-10-12</div>
+  <div class="faint" style="margin-top:6px">三类来源标识：<span class="badge">教材</span> 课件原始材料（低分辨率处已标存疑）　<span class="badge teach">预习重点</span> 参考答案与讲解（版本 1 / 版本 2）　<span class="badge ext">扩充</span> AI 补充的辨析、例句与素材。</div>
+</footer>
+
+
+<script>
+(function(){
+  // 进度条
+  var bar=document.getElementById('bar');
+  window.addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=(h>0?(window.scrollY/h*100):0)+'%';
+  });
+
+  // 来源筛选
+  function toggle(id,cls){
+    var b=document.getElementById(id);
+    b.addEventListener('click',function(){
+      document.body.classList.toggle(cls);
+      b.classList.toggle('on-'+id.replace('f-',''));
+      if(!b.classList.contains('on-'+id.replace('f-',''))){
+        b.style.background='#fff';b.style.color='var(--gray)';b.style.fontWeight='400';
+      }else{b.style.cssText='';}
+    });
+  }
+  toggle('f-text','hide-text');
+  toggle('f-teach','hide-teach');
+  toggle('f-ext','hide-ext');
+
+  // 全页搜索
+  var q=document.getElementById('q'),hit=document.getElementById('hit');
+  var blocks=[].slice.call(document.querySelectorAll('.blk,.sent,.fn,.essay,.callout,.wc-l,figure'));
+  q.addEventListener('input',function(){
+    var v=q.value.trim().toLowerCase();
+    document.body.classList.toggle('searching',v.length>0);
+    if(!v){blocks.forEach(function(b){b.removeAttribute('data-hide')});hit.textContent='';return;}
+    var n=0;
+    blocks.forEach(function(b){
+      var m=b.textContent.toLowerCase().indexOf(v)>-1;
+      if(m){b.removeAttribute('data-hide');n++;}else{b.setAttribute('data-hide','1');}
+    });
+    hit.textContent='匹配 '+n+' 处';
+  });
+
+  // 展开 / 折叠
+  document.getElementById('expand').onclick=function(){
+    [].forEach.call(document.querySelectorAll('details.acc'),function(d){d.open=true});
+  };
+  document.getElementById('collapse').onclick=function(){
+    [].forEach.call(document.querySelectorAll('details.acc'),function(d){d.open=false});
+  };
+
+  // 词汇表筛选
+  var tq=document.getElementById('tq'),tc=document.getElementById('tcount');
+  var rows=[].slice.call(document.querySelectorAll('#vt tbody tr'));
+  tq.addEventListener('input',function(){
+    var v=tq.value.trim().toLowerCase(),n=0;
+    rows.forEach(function(r){
+      var m=r.textContent.toLowerCase().indexOf(v)>-1;
+      r.style.display=m?'':'none';
+      if(m)n++;
+    });
+    tc.textContent='显示 '+n+' / '+rows.length+' 条';
+  });
+
+  // 目录高亮
+  var links=[].slice.call(document.querySelectorAll('nav.toc a'));
+  var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  function spy(){
+    var y=window.scrollY+110,cur=0;
+    secs.forEach(function(s,i){if(s&&s.offsetTop<=y)cur=i;});
+    links.forEach(function(a,i){a.classList.toggle('active',i===cur)});
+  }
+  window.addEventListener('scroll',spy);spy();
+})();
+</script>
+</body>
+
+</html>
